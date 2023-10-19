@@ -1,0 +1,38 @@
+#include <stdio.h>
+
+// Structure to represent a process
+struct Process {
+    int id;     // Process ID
+    int arrivalTime; // Arrival time of the process
+    int burstTime;   // Burst time of the process
+};
+
+int main() {
+    // Create an array of processes
+    struct Process processes[] = {
+        {1, 0, 24},
+        {2, 0, 3},
+        {3, 0, 3}
+    };
+
+    int n = sizeof(processes) / sizeof(processes[0]);
+    int waitingTime[n], turnaroundTime[n];
+
+    waitingTime[0] = 0; // First process doesn't wait.
+    
+    // Calculate waiting time and turnaround time
+    for (int i = 1; i < n; i++) {
+        waitingTime[i] = waitingTime[i - 1] + processes[i - 1].burstTime;
+    }
+    for (int i = 0; i < n; i++) {
+        turnaroundTime[i] = waitingTime[i] + processes[i].burstTime;
+    }
+
+    // Display results
+    printf("Process\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time\n");
+    for (int i = 0; i < n; i++) {
+        printf("%d\t%d\t\t%d\t\t%d\t\t%d\n", processes[i].id, processes[i].arrivalTime, processes[i].burstTime, waitingTime[i], turnaroundTime[i]);
+    }
+
+    return 0;
+}
