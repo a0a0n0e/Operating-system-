@@ -1,0 +1,69 @@
+#include <stdio.h>
+
+#define MEMORY_SIZE 4
+#define PAGE_REFERENCES 12
+
+int memory[MEMORY_SIZE];
+int timestamps[MEMORY_SIZE];
+
+void initializeMemory() {
+    for (int i = 0; i < MEMORY_SIZE; i++) {
+        memory[i] = -1;
+        timestamps[i] = 0;
+    }
+}
+
+int findOldestPage() {
+    int oldest_page = 0;
+    int oldest_timestamp = timestamps[0];
+    for (int i = 1; i < MEMORY_SIZE; i++) {
+        if (timestamps[i] < oldest_timestamp) {
+            oldest_timestamp = timestamps[i];
+            oldest_page = i;
+        }
+    }
+    return oldest_page;
+}
+
+int findPage(int page) {
+    for (int i = 0; i < MEMORY_SIZE; i++) {
+        if (memory[i] == page) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void displayMemory() {
+    for (int i = 0; i < MEMORY_SIZE; i++) {
+        printf("%d ", memory[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int page_references[] = {2, 3, 2, 1, 5, 2, 4, 5, 3, 2, 5, 2};
+    initializeMemory();
+
+    int page_faults = 0;
+    int timestamp = 1;
+    for (int i = 0; i < PAGE_REFERENCES; i++) {
+        int page = page_references[i];
+
+        if (findPage(page) == -1) {
+            int oldest_page = findOldestPage();
+            memory[oldest_page] = page;
+            timestamps[oldest_page] = timestamp;
+            page_faults++;
+        } else {
+            timestamps[findPage(page)] = timestamp;
+        }
+
+        displayMemory();
+        timestamp++;
+    }
+
+    printf("Total Page Faults: %d\n", page_faults);
+
+    return 0;
+}
