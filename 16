@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define a structure for employee records
+struct Employee {
+    int empID;
+    char name[50];
+    float salary;
+};
+
+int main() {
+    FILE *file = fopen("employee_records.dat", "w+b");
+    if (file == NULL) {
+        perror("Unable to create the file");
+        return 1;
+    }
+
+    // Write employee records to the file
+    struct Employee employees[] = {
+        {1, "John Doe", 50000.0},
+        {2, "Jane Smith", 60000.0},
+        {3, "Bob Johnson", 55000.0}
+    };
+
+    for (int i = 0; i < sizeof(employees) / sizeof(employees[0]); i++) {
+        fseek(file, i * sizeof(struct Employee), SEEK_SET);
+        fwrite(&employees[i], sizeof(struct Employee), 1, file);
+    }
+
+    // Read and print employee records
+    struct Employee employee;
+    fseek(file, 0, SEEK_SET);
+
+    printf("Employee Records:\n");
+    while (fread(&employee, sizeof(struct Employee), 1, file)) {
+        printf("ID: %d, Name: %s, Salary: %.2f\n", employee.empID, employee.name, employee.salary);
+    }
+
+    fclose(file);
+    return 0;
+}
