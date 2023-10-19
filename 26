@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    // Create a new file and write to it
+    FILE *file = fopen("example.txt", "w");
+    if (file == NULL) {
+        perror("Error creating file");
+        exit(1);
+    }
+
+    fprintf(file, "Hello, this is a file created and written in C.\n");
+    fclose(file);
+
+    // Open and read the file
+    file = fopen("example.txt", "r");
+    if (file == NULL) {
+        perror("Error opening file");
+        exit(1);
+    }
+
+    char buffer[100];
+    while (fgets(buffer, sizeof(buffer), file) != NULL) {
+        printf("%s", buffer);
+    }
+
+    fclose(file);
+
+    return 0;
+}
