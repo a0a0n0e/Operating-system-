@@ -1,0 +1,91 @@
+#include <stdio.h>
+
+#define MEMORY_SIZE 1000
+
+struct MemoryBlock {
+    int size;
+    int allocated;
+};
+
+struct MemoryBlock memory[MEMORY_SIZE];
+
+void initializeMemory() {
+    for (int i = 0; i < MEMORY_SIZE; i++) {
+        memory[i].size = 0;
+        memory[i].allocated = 0;
+    }
+}
+
+int worstFit(int size) {
+    int worst_fit_index = -1;
+    int worst_fit_size = 0;
+
+    for (int i = 0; i < MEMORY_SIZE; i++) {
+        if (!memory[i].allocated && memory[i].size >= size) {
+            if (memory[i].size > worst_fit_size) {
+                worst_fit_size = memory[i].size;
+                worst_fit_index = i;
+            }
+        }
+    }
+
+    return worst_fit_index;
+}
+
+int allocateMemory(int size) {
+    int block_index = worstFit(size);
+
+    if (block_index >= 0) {
+        memory[block_index].allocated = 1;
+        return block_index;
+    } else {
+        return -1; // No suitable block found
+    }
+}
+
+void deallocateMemory(int index) {
+    if (index >= 0 && index < MEMORY_SIZE) {
+        memory[index].allocated = 0;
+    }
+}
+
+int main() {
+    initializeMemory();
+
+    // Simulate memory allocation requests
+    int block1 = allocateMemory(200);
+    int block2 = allocateMemory(300);
+    int block3 = allocateMemory(150);
+
+    if (block1 >= 0) {
+        printf("Block 1 allocated at index %d\n", block1);
+    } else {
+        printf("Block 1 allocation failed\n");
+    }
+
+    if (block2 >= 0) {
+        printf("Block 2 allocated at index %d\n", block2);
+    } else {
+        printf("Block 2 allocation failed\n");
+    }
+
+    if (block3 >= 0) {
+        printf("Block 3 allocated at index %d\n", block3);
+    } else {
+        printf("Block 3 allocation failed\n");
+    }
+
+    // Deallocate block 2
+    deallocateMemory(block2);
+    printf("Block 2 deallocated\n");
+
+    // Allocate a new block
+    int block4 = allocateMemory(250);
+    if (block4 >= 0) {
+        printf("Block 4 allocated at index %d\n", block4);
+    } else {
+        printf("Block 4 allocation failed\n");
+    }
+
+    return 0;
+}
