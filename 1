@@ -1,0 +1,23 @@
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    pid_t parent_pid = getpid();  // Get the current process ID (parent's ID)
+
+    pid_t child_pid = fork();  // Create a new child process
+
+    if (child_pid < 0) {
+        perror("Fork failed");
+        return 1;
+    } else if (child_pid == 0) {
+        // This code will be executed by the child process
+        printf("Child Process: My Process ID is %d\n", getpid());
+        printf("Child Process: My Parent's Process ID is %d\n", getppid());
+    } else {
+        // This code will be executed by the parent process
+        printf("Parent Process: My Process ID is %d\n", getpid());
+        printf("Parent Process: My Parent's Process ID is %d\n", parent_pid);
+    }
+
+    return 0;
+}
