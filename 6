@@ -1,0 +1,51 @@
+#include <stdio.h>
+
+struct Process {
+    int id;          // Process ID
+    int priority;    // Priority of the process (lower value means higher priority)
+    int burstTime;   // Burst time of the process
+};
+
+void executeProcess(struct Process *p) {
+    // Simulate the execution of the process
+    printf("Executing Process %d (Priority: %d) for 1 unit of time\n", p->id, p->priority);
+    p->burstTime -= 1;
+}
+
+int main() {
+    struct Process processes[] = {
+        {1, 2, 5},
+        {2, 1, 3},
+        {3, 3, 8},
+        {4, 2, 2}
+    };
+
+    int n = sizeof(processes) / sizeof(processes[0]);
+
+    printf("Executing processes in order of highest priority:\n");
+    
+    while (1) {
+        int highestPriority = 9999; // A high initial value to find the lowest priority
+        int selectedProcess = -1;
+
+        for (int i = 0; i < n; i++) {
+            if (processes[i].burstTime > 0 && processes[i].priority < highestPriority) {
+                highestPriority = processes[i].priority;
+                selectedProcess = i;
+            }
+        }
+
+        if (selectedProcess == -1) {
+            // No processes left to execute
+            break;
+        }
+
+        executeProcess(&processes[selectedProcess]);
+
+        if (processes[selectedProcess].burstTime == 0) {
+            printf("Process %d has completed.\n", processes[selectedProcess].id);
+        }
+    }
+
+    return 0;
+}
