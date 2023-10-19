@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <sys/stat.h>
+
+int main() {
+    // Example: File with read and write permissions for owner, read-only for group and others.
+    const char *filename = "example.txt";
+
+    struct stat fileStat;
+    if (stat(filename, &fileStat) == -1) {
+        perror("Error getting file information");
+        return 1;
+    }
+
+    printf("File Permissions:\n");
+    printf("Owner: %s\n", (fileStat.st_mode & S_IRUSR) ? "Read" : "");
+    printf("      %s\n", (fileStat.st_mode & S_IWUSR) ? "Write" : "");
+    printf("      %s\n", (fileStat.st_mode & S_IXUSR) ? "Execute" : "");
+    printf("Group: %s\n", (fileStat.st_mode & S_IRGRP) ? "Read" : "");
+    printf("       %s\n", (fileStat.st_mode & S_IWGRP) ? "Write" : "");
+    printf("       %s\n", (fileStat.st_mode & S_IXGRP) ? "Execute" : "");
+    printf("Others: %s\n", (fileStat.st_mode & S_IROTH) ? "Read" : "");
+    printf("        %s\n", (fileStat.st_mode & S_IWOTH) ? "Write" : "");
+    printf("        %s\n", (fileStat.st_mode & S_IXOTH) ? "Execute" : "");
+
+    return 0;
+}
