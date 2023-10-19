@@ -1,0 +1,23 @@
+#include <stdio.h>
+
+#define RECORD_SIZE 100
+#define NUM_RECORDS 10
+
+int main() {
+    FILE *file = fopen("file.dat", "w");
+    if (file == NULL) {
+        perror("Error creating file");
+        return 1;
+    }
+
+    char record[RECORD_SIZE];
+    for (int i = 1; i <= NUM_RECORDS; i++) {
+        snprintf(record, RECORD_SIZE, "Record %d data.", i);
+        fwrite(record, 1, RECORD_SIZE, file);
+    }
+
+    fclose(file);
+    printf("File created and records written.\n");
+
+    return 0;
+}
