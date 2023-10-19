@@ -1,0 +1,24 @@
+#include <stdio.h>
+
+#define NUM_BLOCKS 10
+
+int main() {
+    FILE *indexFile = fopen("index.dat", "w");
+    if (indexFile == NULL) {
+        perror("Error creating index file");
+        return 1;
+    }
+
+    // Simulate an index block with pointers to data blocks
+    int dataBlocks[NUM_BLOCKS];
+    for (int i = 0; i < NUM_BLOCKS; i++) {
+        dataBlocks[i] = i * 100; // Assume each block is 100 bytes
+    }
+
+    fwrite(dataBlocks, sizeof(int), NUM_BLOCKS, indexFile);
+
+    fclose(indexFile);
+    printf("Index file created with block pointers.\n");
+
+    return 0;
+}
