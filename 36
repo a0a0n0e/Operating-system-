@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_BLOCKS 100
+
+struct DiskBlock {
+    int data;
+    int nextBlock;
+};
+
+struct File {
+    int firstBlock;
+    int lastBlock;
+};
+
+struct DiskBlock disk[MAX_BLOCKS];
+struct File files[MAX_BLOCKS];
+
+int main() {
+    for (int i = 0; i < MAX_BLOCKS; i++) {
+        disk[i].data = 0;   // Initialize data to 0
+        disk[i].nextBlock = -1;  // Initialize next block pointer to -1 (end of the file)
+    }
+
+    int totalBlocks = 10;  // Total blocks on the disk
+    int totalFiles = 3;   // Total files
+
+    // Create files with linked blocks
+    files[0].firstBlock = 0;  // File 0 starts at block 0
+    files[0].lastBlock = 3;   // File 0 ends at block 3
+    disk[0].nextBlock = 1;
+    disk[1].nextBlock = 2;
+    disk[2].nextBlock = 3;
+
+    files[1].firstBlock = 4;  // File 1 starts at block 4
+    files[1].lastBlock = 6;   // File 1 ends at block 6
+    disk[4].nextBlock = 5;
+    disk[5].nextBlock = 6;
+
+    files[2].firstBlock = 7;  // File 2 starts at block 7
+    files[2].lastBlock = 8;   // File 2 ends at block 8
+    disk[7].nextBlock = 8;
+
+    // Display the file structure
+    for (int i = 0; i < totalFiles; i++) {
+        printf("File %d: Starts at block %d, Ends at block %d\n", i, files[i].firstBlock, files[i].lastBlock);
+    }
+
+    return 0;
+}
