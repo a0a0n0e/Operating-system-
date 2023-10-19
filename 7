@@ -1,0 +1,41 @@
+#include <stdio.h>
+
+struct Process {
+    int id;          // Process ID
+    int arrivalTime; // Arrival time of the process
+    int burstTime;   // Burst time of the process
+};
+
+int main() {
+    struct Process processes[] = {
+        {1, 0, 6},
+        {2, 2, 8},
+        {3, 4, 7},
+        {4, 5, 3}
+    };
+
+    int n = sizeof(processes) / sizeof(processes[0]);
+
+    // Sort the processes by their arrival time in ascending order
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (processes[i].arrivalTime > processes[j].arrivalTime) {
+                // Swap the processes
+                struct Process temp = processes[i];
+                processes[i] = processes[j];
+                processes[j] = temp;
+            }
+        }
+    }
+
+    printf("Executing processes in order of non-preemptive SJF:\n");
+    int totalTime = 0;
+    for (int i = 0; i < n; i++) {
+        printf("Executing Process %d (Burst Time: %d)\n", processes[i].id, processes[i].burstTime);
+        totalTime += processes[i].burstTime;
+    }
+
+    printf("Average Turnaround Time: %.2f\n", (float)totalTime / n);
+
+    return 0;
+}
